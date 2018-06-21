@@ -34,7 +34,7 @@
 		&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 			&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 			&nbsp;&nbsp;";;
 		
 	define('PHP_TAB',"\t");
-	$conn = mysqli_connect($db_host,$db_user,$db_passwd,$db_name);	//mysql connect
+	$conn = mysqli_connect($db_host,$db_user,$db_passwd,$db_name); //mysql connect
 
 	if(mysqli_connect($conn)){ //Exception handling
 		echo "failed : ",mysqli_connect_error();
