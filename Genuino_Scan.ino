@@ -115,7 +115,7 @@ long distanceCheck1()   //check distance parking place 1
   return distance;
 }
 
-long distanceCheck2()   //check distance parking place 2
+long distanceCheck2()  //check distance parking place 2
 {
   long duration;
   long distance;
