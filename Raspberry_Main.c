@@ -16,7 +16,7 @@ char device[]="/dev/ttyACM0";//arduino port
 char MacNumber[18]="";//mac address
 int MacCount = 0;//mac adress size check
 int fd;//serial connect flag
-int ff;//
+int ff;
 
 unsigned long baud = 115200;//serial transport speed
 unsigned long time = 0;
