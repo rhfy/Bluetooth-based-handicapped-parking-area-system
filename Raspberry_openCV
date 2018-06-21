@@ -1,0 +1,165 @@
+#ifdef RaspberryPi
+
+
+#include  <opencv/cv.h>
+#include <opencv/cxcore.h>
+#include <opencv/cvaux.h>
+#include <opencv/highgui.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
+
+#include <wiringPi.h>
+#include <wiringSerial.h>
+
+//port number (camera)
+char device[] = "/dev/ttyACM0";
+
+int fd;
+
+
+unsigned long baud = 9600;
+
+
+int key = 0;
+int gCameraFlag = 1;
+
+//save temp Image
+IplImage * resetTempImage(IplImage *image , CvCapture* capture);
+
+int main();
+void loop();
+void setup();
+
+//start raspberry setting serial communication
+void setup()
+{
+	printf("%s \n","Raspberry Start!");
+	fflush(stdout);
+
+	if((fd = serialOpen(device,baud)) < 0)
+		{
+			fprintf(stderr,"unable to open serial device : %s\n",strerror(errno));
+			exit(1);
+		}
+
+	if(wiringPiSetup() == -1)
+	{
+		fprintf(stdout,"Unable to start wiringPi : %s\n",strerror(errno));
+		exit(1);
+	}
+}
+
+
+//main 
+int main()
+{
+	setup();
+	loop();
+	return 0;
+}
+
+
+void loop()
+{
+   double min, max;
+   CvPoint left_top;
+   IplImage *result;
+   IplImage * image = 0; // IplImage structure image point create 
+   CvCapture* capture; // capture variable
+   int param = 3;
+   int cnt = 0;
+   int count = 10;
+   IplImage * original_canny;
+   IplImage * temp_canny;
+   char *tempPicture = "First Image";
+   char *tempImage = "ROI Image";
+   double now;
+   double time = 0;
+   capture = cvCaptureFromCAM(0); //  0 connected camera control
+
+   key = 0;
+   image = 0;
+   image = cvQueryFrame(capture);
+   
+   IplImage * temp;
+   image = cvQueryFrame(capture);
+   temp = resetTempImage(image,capture); // save temp image
+   cvWaitKey(0);
+   
+   image = 0;
+   image = cvQueryFrame(capture);
+
+   while (1) // video
+   {
+      min = 0, max = 0;
+      image = cvQueryFrame(capture); 
+      key = cvWaitKey(1);
+      if (key == 82 || key == 114) // click 'r' or 'R' resetTempImage
+         temp = resetTempImage(image,capture);
+      if (key == 27) { //  click 'esc' exit program
+         break;
+      }
+      result = cvCreateImage(cvSize(image->width - temp->width + 1, image->height - temp->height + 1), IPL_DEPTH_32F, 1); //createImage
+      left_top.x = 0; // find X
+      left_top.y = 0; // find Y
+      cvShowImage("TEMP IMAGE",temp);
+      cvMatchTemplate(image, temp, result, CV_TM_CCOEFF_NORMED); // templete matching
+      cvMinMaxLoc(result, &min, &max, NULL, &left_top); // find max , min , point
+      printf("max = %lf",max); // print max
+      if(max > 0.95){ // check max
+	      count = 10; // reset
+	      printf("count reset\n");
+      }
+      else // max <= 0.95 (95%)
+      {
+
+		if(count >0)
+		{
+			count--;
+		}
+		else
+		{
+			count = 0;
+		}
+		printf("count = %d\n",count);
+      }
+      if(count == 0) // isn't same
+      {
+	serialPutchar(fd,49); // send serial '1'
+      }
+      else // same
+      {
+	serialPutchar(fd,48); // send serial '0'
+      }
+      cvShowImage("Original", image); // show original image
+
+   }
+   cvReleaseCapture(&capture); // release memory
+   cvReleaseImage(&temp); // reiease memory
+   cvDestroyAllWindows(); //distroy windows
+}
+
+
+IplImage * resetTempImage(IplImage *image, CvCapture* capture) // Catch TempImage
+{ 
+
+   IplImage * temp;
+   image = cvQueryFrame(capture);
+
+   temp = (IplImage *)cvClone(image);
+   cvSetImageROI(temp, cvRect(280, 0, 120, image->height/(1.1))); // catch rectSize
+
+   cvSaveImage("TEMP.jpg", temp); // save Image
+   image = 0;
+   image = cvQueryFrame(capture); 
+
+   temp = cvLoadImage("TEMP.jpg"); // load temp image to temp
+   printf("save TempImage\n");
+   return temp;
+
+}
+
+#endif
