@@ -30,6 +30,10 @@
 
 >현재 대중화된 유사제품은 없는것으로 알고있으며 유사한 기술로는 차단기가 없는 주차 방지 기술이 있다. 그 기술은 과학기술정보통신부 기술로 번호판 인식을 통한 비장애인이 주차 시 경보음으로만 알려주는 시스템이며
 이를 통해서 불법 주차 율이 68%로 감소되었다는 정보가 있다. 하지만 거기에 이 프로젝트는 차단기를 만들어 장애인 주차구역에 설치하면 일반 차량 불법 주차를 확실히 막을 수 있기 때문에 보다 높은 불법 주차 방지 효과를 볼 수 있을 것이라 생각한다.
+> ![kakaotalk_20180621_174145792](https://user-images.githubusercontent.com/37283217/41708153-c287ad9c-757a-11e8-947a-cbef196c846a.png)
+> ![kakaotalk_20180621_174314709](https://user-images.githubusercontent.com/37283217/41708180-d45b4722-757a-11e8-9059-66d2fa3ff899.png)
+> ![default](https://user-images.githubusercontent.com/37283217/41708228-f25cc2f0-757a-11e8-8308-da68cd75f457.jpg)
+> ![kakaotalk_20180621_174313721](https://user-images.githubusercontent.com/37283217/41708193-d9f2b26a-757a-11e8-8461-ddc16bef9cea.png)
 
 **프로젝트 시연 영상**
 
